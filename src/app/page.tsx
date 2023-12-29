@@ -1,35 +1,20 @@
-'use client'
-import { useRouter } from "next/navigation"
-import { SyntheticEvent, useState } from "react"
 
+import { auth } from "@/auth";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function HomePage() {
-  const [ form, setForm ] = useState({
-    movie_name:"",
-    movie_rel_year:""
-  })
-  const router = useRouter()
-  const changeHandler = (e : SyntheticEvent<HTMLInputElement>) => {
-    const input = e.target as HTMLInputElement
-    console.log(form)
-    setForm((prev) => {
-      return {
-        ...prev,
-        [input.id] : input.value
-      }
-    })
-  }
-
-  const submitHandler = (e : SyntheticEvent<HTMLButtonElement>) => {
-    console.log(`Searching for ${form.movie_name}`);
-    router.push("/results?" + new URLSearchParams(form).toString())
-  }
-  return (
-    <>
-    <h1>Search</h1>
-    <input type="text" onChange={changeHandler} id="movie_name" />
-    <input type="text" onChange={changeHandler}   id="movie_rel_year" />
-    <button type="button" onClick={submitHandler}>Search</button>
-    </>
-  )
+export default async function HomePage() {
+    const sess = await auth()
+    if(!sess?.user){
+        redirect("/api/auth/signin")
+    }
+    return (
+        <>
+        <h1>Welcome {sess.user.name}</h1>
+            <Link href="/movie">Movie Search</Link> <br />
+            <Link href="/series">Series Search</Link> <br />
+            <Link href="/api/auth/signout">Signout</Link>
+        </>
+    )
 }
+

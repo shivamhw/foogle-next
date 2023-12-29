@@ -1,21 +1,22 @@
 'use client'
-import { FileBox } from "@/components/Filebox"
 import { FoogleMovieResponse, MovieSearchResponse } from "@/types/foogle"
 import axios from "axios"
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
-
-export default function Result() {
+import { FileBox } from "@/components/Filebox"
+export default function Sresult() {
     const data = useSearchParams()
-    const movie_name = data.get("movie_name")
-    const movie_rel_year = data.get("movie_rel_year")
+    const name = data.get("name")
+    const season = data.get("season")
+    const episode = data.get("episode")
     const [loading, setLoading] = useState(true)
     const [links, setLinks] = useState<FoogleMovieResponse[]>()
     const init = async () => {
-        const res = await axios.get<MovieSearchResponse>("/api/search/movie", {
+        const res = await axios.get<MovieSearchResponse>("/api/search/series", {
             params: {
-                movie_name,
-                movie_rel_year
+                name,
+                season,
+                episode
             }
         })
         console.log(res)
@@ -34,11 +35,10 @@ export default function Result() {
     }
     return (
         <>
-            <h1>This is result page {movie_name}</h1>
+            <h1>This is result page {name}</h1>
             {links?.map((file) => {
                 return <FileBox file={file} />
             })}
         </>
     )
 }
-

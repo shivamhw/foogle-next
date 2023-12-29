@@ -16,3 +16,9 @@ export type MovieSearchResponse = {
     data?: FoogleMovieResponse[] | [],
     len?: number
 };
+
+export type SeriesSearchQueryParams = {
+    name : string,
+    season ?: string,
+    episode ?: string
+}

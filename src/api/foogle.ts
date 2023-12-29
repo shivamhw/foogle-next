@@ -1,4 +1,4 @@
-import { MovieSearchQueryParams, MovieSearchResponse } from "../types/foogle";
+import { MovieSearchQueryParams, MovieSearchResponse, SeriesSearchQueryParams } from "../types/foogle";
 import axios from "axios";
 
 axios.defaults.baseURL = process.env.FOOGLE_API_URL
@@ -14,7 +14,16 @@ export class Foogle{
     }
     public async getMovies(params : MovieSearchQueryParams) {
         const { data } = await axios.get<MovieSearchResponse>("/movies?" + new URLSearchParams(params).toString())
-        console.log(data)
+        return data;
+    }
+    public async getSeries(params : SeriesSearchQueryParams){
+        const { data } = await axios.get<MovieSearchResponse>("/series", {
+            params:{
+                name: params.name,
+                season: params.season,
+                episode: params.episode
+            }
+        })
         return data;
     }
 }
